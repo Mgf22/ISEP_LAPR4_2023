@@ -1,0 +1,39 @@
+@startuml
+class TCPClient {
+}
+
+class TCPServer {
+}
+
+class ArchiveBoardUI <<presentation>>{
+}
+class ArchiveBoardController <<application>> {
++findBoardOwned(email)
++archiveBoard(board)
++findBoardById(boardId)
+}
+
+class BoardManagementService <<application>> {
++archiveBoard()
+}
+
+class BoardRepository <<repository>> {
++findBoardOwned(email)
++findBoardbyId(id)
++archiveBoard(board)
+}
+
+class SharedBoard <<domain>>{
++archive()
+}
+
+
+TCPClient --> ArchiveBoardUI
+TCPClient --> TCPServer
+TCPServer --> ArchiveBoardController
+ArchiveBoardController --> BoardRepository
+ArchiveBoardController --> BoardManagementService
+BoardManagementService --> SharedBoard
+BoardManagementService --> BoardRepository
+
+@enduml

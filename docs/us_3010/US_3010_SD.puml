@@ -1,0 +1,41 @@
+@startuml
+actor User as user
+participant TCPClient as tcpC
+participant TCPServer as tcpS
+participant "ArchiveBoardUi" as ui<<presentation>>
+participant "ArchiveBoardController" as ctrl <<application>>
+participant "BoardManagementService" as svc <<application>>
+participant "SharedBoard" as sb <<domain>>
+database "BoardRepository" as repoB <<repository>>
+
+user --> tcpC
+autonumber 30 "<font color=black><b>Message 0  "
+tcpC -> tcpS
+autonumber stop
+tcpS -> ctrl : findBoardOwned(email)
+ctrl -> repoB : findBoardOwned(email)
+repoB -> ctrl
+ctrl -> tcpS
+tcpS -> tcpC
+tcpC -> ui : chooseIdBoard(list)
+ui -> tcpC
+autonumber 31 "<font color=black><b>Message 0  "
+tcpC -> tcpS
+autonumber stop
+tcpS -> ctrl : findBoardById(boardId)
+ctrl -> repoB : findBoardById(id)
+repoB -> ctrl
+ctrl -> tcpS
+tcpS -> ctrl : archiveBoard(board)
+ctrl -> svc : archiveBoard(board)
+svc -> sb : archive()
+svc -> repoB : archiveBoard(board)
+repoB -> svc
+svc -> ctrl
+ctrl -> tcpS
+tcpS -> tcpC
+tcpC --> user
+
+
+
+@enduml

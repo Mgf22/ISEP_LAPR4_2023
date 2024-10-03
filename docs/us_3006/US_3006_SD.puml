@@ -1,0 +1,45 @@
+@startuml
+actor User as user
+participant TCPClient as tcpC
+participant TCPServer as tcpS
+participant "AddPostItUi" as ui<< presentation >>
+participant "AddPostItController" as ctrl <<application>>
+participant "BoardManagementService" as svc <<application>>
+database "PostItRepository" as repoP <<repository>>
+database "BoardRepository" as repoB <<repository>>
+database "UserRepository" as repoU <<repository>>
+participant "PostIts" as post <<domain>>
+
+user --> tcpC
+autonumber 40 "<font color=black><b>Message 0  "
+tcpC -> tcpS
+autonumber stop
+tcpS -> ctrl : findBoardPresent(email)
+ctrl -> repoB :findBoardPresentWrite(email)
+repoB -> ctrl
+ctrl -> tcpS
+tcpS -> tcpC
+tcpC -> ui : addPostIt(list)
+ui -> tcpC
+autonumber 41 "<font color=black><b>Message 0  "
+tcpC -> tcpS
+autonumber stop
+tcpS -> ctrl : addPostIt(email,data,row,column,boardId)
+ctrl -> svc :addPostIt(email,data,row,column,boardId)
+svc -> repoU : findUserByEmail(email)
+repoU -> svc
+svc -> repoB : findBoardById(boardId)
+repoB -> svc
+loop
+svc -> repoP : findPostItByBoardId(boardid)
+repoP -> svc
+end
+svc -> post : create ()
+svc -> repoP : save(post)
+repoP -> svc
+svc -> ctrl
+ctrl -> tcpS
+tcpS -> tcpC
+tcpC --> user
+
+@enduml

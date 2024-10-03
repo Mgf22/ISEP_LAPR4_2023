@@ -1,0 +1,8 @@
+@startuml
+
+:User: as User
+
+User -> (Archive a board I own)
+
+
+@enduml

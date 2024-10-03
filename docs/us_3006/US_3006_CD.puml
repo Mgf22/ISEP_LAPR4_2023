@@ -1,0 +1,46 @@
+@startuml
+class TCPClient{
+}
+
+class TCPServer{
+}
+
+class AddPostItUI <<presentation>>{
+}
+class AddPostItController <<application>> {
++findBoardPresent(email)
++addPostIt(email,data,row,column,boardId)
+}
+
+class BoardManagementService <<application>> {
++addPostIt(email,data,row,column,boardId)
+}
+
+class PostItRepository <<repository>> {
++findPostItByBoardId(boardId)
+}
+
+class BoardRepository <<repository>> {
++findBoardPresentWrite(email)
++findBoardById(boardId)
+}
+
+class UserRepository{
+findUserByEmail(email)
+}
+
+class PostIts <<doamin>>{
+}
+
+
+TCPClient --> AddPostItUI
+TCPClient --> TCPServer
+TCPServer --> AddPostItController
+AddPostItController --> BoardRepository
+AddPostItController --> BoardManagementService
+BoardManagementService --> UserRepository
+BoardManagementService --> BoardRepository
+BoardManagementService --> PostItRepository
+BoardManagementService --> PostIts
+
+@enduml

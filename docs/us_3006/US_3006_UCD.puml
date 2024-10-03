@@ -1,0 +1,8 @@
+@startuml
+
+:User: as User
+
+User -> (Create a post-it on a board)
+
+
+@enduml
